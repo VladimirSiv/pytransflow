@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "pytransflow"
+version = "0.1.0"
+description = "Simple library for record-level processing using flows of transformations defined as YAML files."
+authors = ["Vladimir Sivcevic <vladsiv@protonmail.com>"]
+maintainers = ["Vladimir Sivcevic <vladsiv@protonmail.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["Flow", "Transformation", "Record Processing", "Data", "Pipelines"]
+include = ["LICENSE"]
+
+[tool.poetry.dependencies]
+python = "^3.8.11"
+pydantic = "^2.7.2"
+PyYAML = "^6.0"
+simpleeval = "^0.9.12"
+tomli = "^1.2.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.1"
+black = "24.4.2"
+mypy = "^1.10.0"
+pylint = "^3.2.2"
+Sphinx = "^6.2.1"
+sphinx-autodoc-typehints = "^1.14.1"
+sphinx-book-theme = "1.0.1"
+types-PyYAML = "^6.0.3"
+pytest-cov = "^3.0.0"
+
+[tool.black]
+line-length = 100
+
+[tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
+
+[tool.poetry.scripts]
+linters = "scripts.build:linters"
+tests = "scripts.build:tests"
+docs = "scripts.build:docs"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

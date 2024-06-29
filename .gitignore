@@ -1,0 +1,30 @@
+# Editors
+.vscode/
+*.swp
+
+# Python files
+**/__pycache__
+.pytest_cache
+.mypy_cache
+
+# Project files
+Notes.md
+
+# Tests
+test_data
+test-flows
+test.py
+
+# Documentation build
+docs/build
+docs/source/api
+diagrams
+pdf-docs
+
+# Build
+dist/
+
+# Test reports
+cov_html/
+.coverage
+.coverage.*
