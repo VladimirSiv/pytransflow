@@ -67,7 +67,7 @@ The following are some of the features that pytransflow provides:
 - Use flow level variables etc.
 
 For more information on these features and how to use them, please refer to the
-[Wiki Page](https://github.com/VladimirSiv/pytransflow-dev/wiki).
+[Wiki Page](https://github.com/VladimirSiv/pytransflow/wiki).
 
 ## License
 
