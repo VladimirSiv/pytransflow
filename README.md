@@ -45,7 +45,7 @@ pprint(flow.datasets)  # End result
 pprint(flow.failed_records)  # Failed records
 ```
 
-Refer to the [Getting Started](https://github.com/VladimirSiv/pytransflow-dev/wiki/Getting-Started)
+Refer to the [Getting Started](https://github.com/VladimirSiv/pytransflow/wiki/Getting-Started)
 wiki page for additional examples and guided initial steps or check out the blog post that
 introduces this library [pytransflow](https://www.vladsiv.com/pytransflow/).
 
