@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import patch
 from pydantic import BaseModel, StrictStr
-from pydantic.error_wrappers import ValidationError
 from pytransflow.transformations.validate import (
     ValidateTransformation,
     ValidateTransformationSchema,
@@ -10,7 +9,11 @@ from pytransflow.core.schema import SchemaLoader
 from pytransflow.core.record import Record
 from pytransflow.core.transformation import TransformationConfiguration
 from pytransflow.core.configuration import TransflowConfiguration
-from pytransflow.exceptions import SchemaFileNotFoundException, SchemaFailedToLoadException
+from pytransflow.exceptions import (
+    SchemaFileNotFoundException,
+    SchemaFailedToLoadException,
+    SchemaValidationException,
+)
 
 
 def mock_schema(*args):
@@ -162,7 +165,7 @@ def test_wrong_types():
 
     t_config = TransformationConfiguration(ValidateTransformationSchema, config)
     transformation = ValidateTransformation(t_config)
-    with pytest.raises(ValidationError):
+    with pytest.raises(SchemaValidationException):
         transformation.execute(initial_record)
 
 
@@ -176,3 +179,19 @@ def test_remove_fields():
     transformation = ValidateTransformation(t_config)
     result = transformation.execute(initial_record)
     assert result == Record({"a": "a"})
+
+
+def test_schema_validation_exception():
+    SchemaLoader.load = mock_schema
+
+    config = {"schema_name": "test.TestSchema"}
+    initial_record = Record({"b": "a"})
+
+    t_config = TransformationConfiguration(ValidateTransformationSchema, config)
+    transformation = ValidateTransformation(t_config)
+
+    with pytest.raises(
+        SchemaValidationException,
+        match="Schema validation error: 1 validation error for TestSchema\na\n .*"
+    ):
+        transformation.execute(initial_record)

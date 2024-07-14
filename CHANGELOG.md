@@ -4,6 +4,8 @@
 
 ### Added
 
+- Schema Validation Exception
+
 ### Changed
 
 ### Fixed

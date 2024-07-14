@@ -16,6 +16,7 @@ from pytransflow.exceptions import (
     FlowFailedException,
     FlowVariableDoesNotExistException,
     FlowVariableAlreadyExistsException,
+    SchemaValidationException,
 )
 
 
@@ -261,7 +262,43 @@ def test_one_failed_record():
     assert len(failed_record.failed_records) == 1
 
 
-def test_ignore_error():
+def test_failed_record_shema_validation(tmp_path):
+    schemas_path = tmp_path / "schemas"
+    schemas_path.mkdir()
+    TransflowConfiguration().schemas_path = schemas_path
+
+    schema_file = schemas_path / "test.py"
+    schema_file.write_text(
+        "from pydantic import BaseModel\n"
+        "class TestSchema(BaseModel):\n"
+        "\ta: str"
+    )
+
+    config = {
+        "transformations": [
+            {
+                "validate": {
+                    "schema_name": "test.TestSchema",
+                }
+            }
+        ]
+    }
+    flow = Flow(config=config)
+    flow.process([{"a": 1}])
+    dataset = flow.datasets
+    failed_records = flow.failed_records
+
+    assert dataset == {}
+
+    assert len(failed_records) == 1
+    failed_record = failed_records[0]
+    assert isinstance(failed_record, FailedDataset)
+    assert failed_record.record == {"a": 1}
+    assert len(failed_record.failed_records) == 1
+    assert isinstance(failed_record.failed_records[0].error, SchemaValidationException)
+
+
+def test_ignore_error_output_already_exists():
     config = {
         "transformations": [
             {
@@ -282,7 +319,7 @@ def test_ignore_error():
     assert len(failed_records) == 0
 
 
-def test_ignore_error():
+def test_ignore_error_field_does_not_exist():
     config = {
         "transformations": [
             {

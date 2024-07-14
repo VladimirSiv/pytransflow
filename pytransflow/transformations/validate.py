@@ -4,13 +4,15 @@ Defines classes and methods related to ``Validate`` Transformation
 
 import logging
 from typing_extensions import Self
-from pydantic import Field, model_validator
+from pydantic import Field, model_validator, ValidationError
 from pytransflow.core.schema import SchemaLoader
 from pytransflow.core.record import Record
 from pytransflow.core.transformation import (
     Transformation,
     TransformationSchema,
 )
+from pytransflow.exceptions import SchemaValidationException
+
 
 logger = logging.getLogger(__name__)
 
@@ -44,4 +46,7 @@ class ValidateTransformation(Transformation):
     ) -> Record:
         logger.debug("Applying transformation: Validate")
         schema_class = SchemaLoader.load(self.config.schema.schema_name)
-        return Record(schema_class(**record.data).model_dump())
+        try:
+            return Record(schema_class(**record.data).model_dump())
+        except ValidationError as error:
+            raise SchemaValidationException(str(error)) from error

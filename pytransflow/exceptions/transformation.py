@@ -24,3 +24,12 @@ class FieldWrongTypeException(TransformationBaseException):
 
     def __init__(self, field: str, _type: Type[Any], expected: str) -> None:
         super().__init__(f"Field '{field}' is of type '{_type}', expected: '{expected}'")
+
+
+class SchemaValidationException(TransformationBaseException):
+    """Implements Schema Validation Exception"""
+
+    name = "validation_error"
+
+    def __init__(self, error: str) -> None:
+        super().__init__(f"Schema validation error: {error}")

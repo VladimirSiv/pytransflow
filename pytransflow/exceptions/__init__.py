@@ -29,6 +29,7 @@ from pytransflow.exceptions.flow import (
 from pytransflow.exceptions.transformation import (
     TransformationBaseException,
     FieldWrongTypeException,
+    SchemaValidationException,
 )
 from pytransflow.exceptions.controller import (
     ControllerBaseException,
@@ -64,6 +65,7 @@ __all__ = [
     "TransformationDoesNotExistException",
     "TransformationBaseException",
     "FieldWrongTypeException",
+    "SchemaValidationException",
     "ControllerBaseException",
     "ControllerTransformationFailedException",
     "TransflowConfigurationBaseException",
