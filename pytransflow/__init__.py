@@ -9,7 +9,7 @@ from typing import Dict, Any
 from pkgutil import iter_modules
 from pytransflow.core import TransformationCatalogue
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 logging.getLogger("pytransflow").addHandler(logging.NullHandler())
 
 
