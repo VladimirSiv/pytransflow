@@ -6,7 +6,7 @@ on:
 jobs:
   tag-release:
     runs-on: ubuntu-latest
-    # if: startsWith(github.event.pull_request.title, 'Release:')
+    if: startsWith(github.event.pull_request.title, 'Release:')
     permissions:
       contents: write
     steps:
@@ -18,8 +18,8 @@ jobs:
         id: cached-poetry
         uses: actions/cache@v3
         with:
-            path: ~/.local
-            key: poetry-0
+          path: ~/.local
+          key: poetry-0
       - name: Install Poetry
         if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
