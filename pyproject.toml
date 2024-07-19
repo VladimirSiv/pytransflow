@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytransflow"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simple library for record-level processing using flows of transformations defined as YAML files."
 authors = ["Vladimir Sivcevic <vladsiv@protonmail.com>"]
 maintainers = ["Vladimir Sivcevic <vladsiv@protonmail.com>"]
