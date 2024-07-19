@@ -2,6 +2,34 @@
 
 A simple library for record-level processing using flows of transformations defined as YAML files
 
+## Features
+
+The following are some of the features that pytransflow provides:
+
+- Define processing flows using YAML files
+- Use all kinds of flow configurations to fine-tune the flow
+- Leverage [pydantic](https://github.com/pydantic/pydantic)‘s features for data validation
+- Apply transformations only if defined condition is met
+- Build your own library of transformations
+- Use multiple input and output datasets
+- Ignore specific errors during processing
+- Set conditions for output datasets
+- Track failed records
+- Define flow fail scenarios
+- Process records in parallel
+- Use flow level variables etc.
+
+For more information on these features and how to use them, please refer to the
+[Wiki Page](https://github.com/VladimirSiv/pytransflow/wiki).
+
+## Installation
+
+`pytransflow` is available on PyPI at [pytransflow](https://pypi.org/project/pytransflow/).
+
+```
+pip install pytransflow
+```
+
 ## Overview
 
 pytransflow lets you process records by defining a flow of transformations.
@@ -48,26 +76,6 @@ pprint(flow.failed_records)  # Failed records
 Refer to the [Getting Started](https://github.com/VladimirSiv/pytransflow/wiki/Getting-Started)
 wiki page for additional examples and guided initial steps or check out the blog post that
 introduces this library [pytransflow](https://www.vladsiv.com/pytransflow/).
-
-## Features
-
-The following are some of the features that pytransflow provides:
-
-- Define processing flows using YAML files
-- Use all kinds of flow configurations to fine-tune the flow
-- Leverage [pydantic](https://github.com/pydantic/pydantic)‘s features for data validation
-- Apply transformations only if defined condition is met
-- Build your own library of transformations
-- Use multiple input and output datasets
-- Ignore specific errors during processing
-- Set conditions for output datasets
-- Track failed records
-- Define flow fail scenarios
-- Process records in parallel
-- Use flow level variables etc.
-
-For more information on these features and how to use them, please refer to the
-[Wiki Page](https://github.com/VladimirSiv/pytransflow/wiki).
 
 ## License
 
