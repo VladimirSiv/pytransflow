@@ -1,6 +1,6 @@
 # Changelog
 
-## [x.y.z] - yyyy-mm-dd
+## [Unreleased]
 
 ### Added
 

@@ -1,0 +1,69 @@
+name: Version and Changelog
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version name'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+jobs:
+  version:
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Load Cached Poetry Installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+            path: ~/.local
+            key: poetry-0
+      - name: Install Poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Set up Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - name: Update version
+        run: poetry version ${{ github.event.inputs.version }}
+      - name: Version
+        id: version
+        run: echo "version=$(poetry version | cut -d ' ' -f2)" >> $GITHUB_OUTPUT
+      - name: Update Changelog
+        run: |
+          sed -i "s/\#\# \[Unreleased\]/\#\# \[Unreleased\]\n\n\#\#\# Added\n\n\#\#\# Changed\n\n\#\#\# Fixed\n\n\#\# [${{ steps.version.outputs.version }}] - $(date +%F)/" CHANGELOG.md
+      - name: Update init
+        run: |
+          sed -i "s/__version__.*/__version__ = \"${{ steps.version.outputs.version }}\"/" pytransflow/__init__.py
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/${{ steps.version.outputs.version }}
+          title: "Release: ${{ steps.version.outputs.version }} Pull Request"
+          body: "Pull request for the new release version changes"
+          delete-branch: true
+          base: main

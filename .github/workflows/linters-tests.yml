@@ -1,0 +1,38 @@
+name: Linters and Tests
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: main
+jobs:
+  linters-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Load Cached Poetry Installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+            path: ~/.local
+            key: poetry-0
+      - name: Install Poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Run Linters and Tests
+        run: |
+          source .venv/bin/activate
+          poetry run linters
+          poetry run tests
